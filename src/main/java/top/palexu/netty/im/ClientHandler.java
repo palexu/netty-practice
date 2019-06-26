@@ -1,9 +1,11 @@
 package top.palexu.netty.im;
 
 import io.netty.buffer.ByteBuf;
+import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import top.palexu.netty.im.protocol.*;
+import top.palexu.netty.im.util.LoginUtil;
 
 import java.util.Date;
 import java.util.UUID;
@@ -34,7 +36,7 @@ public class ClientHandler extends ChannelInboundHandlerAdapter {
         Packet packet = PacketCodeC.INSTANCE.decode(byteBuf);
 
         if (packet instanceof LoginResponsePacket) {
-            handleLoginResponse((LoginResponsePacket) packet);
+            handleLoginResponse(ctx.channel(), (LoginResponsePacket) packet);
         } else if (packet instanceof MessageResponsePacket) {
             handleMessageResponse((MessageResponsePacket) packet);
         }
@@ -45,10 +47,11 @@ public class ClientHandler extends ChannelInboundHandlerAdapter {
         System.out.println("message response: " + packet.getMsg());
     }
 
-    private void handleLoginResponse(LoginResponsePacket packet) {
+    private void handleLoginResponse(Channel channel, LoginResponsePacket packet) {
 
         if (packet.isSuccess()) {
             System.out.println("登录成功!");
+            LoginUtil.setLogin(channel);
         } else {
             System.out.println("登录失败，msg: " + packet.getMsg());
         }

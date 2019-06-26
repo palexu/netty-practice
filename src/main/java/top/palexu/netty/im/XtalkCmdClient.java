@@ -10,7 +10,14 @@ import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.util.AttributeKey;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
+import top.palexu.netty.im.protocol.MessageRequestPacket;
+import top.palexu.netty.im.protocol.PacketCodeC;
+import top.palexu.netty.im.util.LoginUtil;
 
+import java.util.Scanner;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -53,16 +60,18 @@ public class XtalkCmdClient {
     }
 
     private void connect(final Bootstrap bootstrap, final int retry) throws InterruptedException {
-        ChannelFuture channelFuture = bootstrap.connect().sync()
+        final ChannelFuture channelFuture = bootstrap.connect().sync()
                 .addListener(new GenericFutureListener<Future<? super Void>>() {
                     public void operationComplete(Future<? super Void> future) throws Exception {
                         if (future.isSuccess()) {
                             System.out.println("连接成功!");
+                            console((ChannelFuture) future);
                             return;
                         }
                         System.out.println("连接失败! 剩余尝试次数" + retry);
                         if (retry == 0) {
                             return;
+
                         }
                         int order = 5 - retry + 1;
                         int delay = 1 << order;
@@ -77,7 +86,34 @@ public class XtalkCmdClient {
                         }, delay, TimeUnit.SECONDS);
                     }
                 });
+
+
         channelFuture.channel().closeFuture().sync();
+    }
+
+    private void console(final ChannelFuture channelFuture) {
+        ThreadPoolExecutor executor = new ThreadPoolExecutor(1, 1, 60, TimeUnit.SECONDS, new ArrayBlockingQueue<Runnable>(1), new ThreadFactory() {
+            public Thread newThread(Runnable r) {
+                return new Thread(r, "console-thread");
+            }
+        });
+        executor.submit(new Runnable() {
+            public void run() {
+                while (!Thread.interrupted()) {
+                    if (!LoginUtil.isLogin(channelFuture.channel())) {
+                        continue;
+                    }
+                    System.out.println("输入消息:");
+                    Scanner scanner = new Scanner(System.in);
+                    String msg = scanner.nextLine();
+
+                    MessageRequestPacket packet = new MessageRequestPacket();
+                    packet.setMsg(msg);
+
+                    channelFuture.channel().writeAndFlush(PacketCodeC.INSTANCE.encode(packet));
+                }
+            }
+        });
     }
 
     public static void main(String[] args) throws InterruptedException {
