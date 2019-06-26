@@ -1,4 +1,4 @@
-package top.palexu.netty.im;
+package top.palexu.netty.im.client;
 
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.ChannelFuture;
@@ -12,6 +12,8 @@ import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
 import top.palexu.netty.im.protocol.MessageRequestPacket;
 import top.palexu.netty.im.protocol.PacketCodeC;
+import top.palexu.netty.im.protocol.PacketDecoder;
+import top.palexu.netty.im.protocol.PacketEncoder;
 import top.palexu.netty.im.util.LoginUtil;
 
 import java.util.Scanner;
@@ -44,7 +46,10 @@ public class XtalkCmdClient {
                     .handler(new ChannelInitializer<NioSocketChannel>() {
                         @Override
                         protected void initChannel(NioSocketChannel ch) throws Exception {
-                            ch.pipeline().addLast(new ClientHandler());
+                            ch.pipeline()
+                                    .addLast(new PacketDecoder())
+                                    .addLast(new ClientHandler())
+                                    .addLast(new PacketEncoder());
                         }
                     });
             bootstrap.option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 5000)

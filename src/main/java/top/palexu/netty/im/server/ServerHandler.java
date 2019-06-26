@@ -1,27 +1,21 @@
-package top.palexu.netty.im;
+package top.palexu.netty.im.server;
 
-import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.ChannelInboundHandlerAdapter;
+import io.netty.channel.SimpleChannelInboundHandler;
 import top.palexu.netty.im.protocol.*;
 
 /**
  * @author palexu * @since 2019/06/26 15:24
  */
-public class ServerHandler extends ChannelInboundHandlerAdapter {
+public class ServerHandler extends SimpleChannelInboundHandler<Packet> {
 
     @Override
-    public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-        ByteBuf byteBuf = (ByteBuf) msg;
-
-        Packet reqeust = PacketCodeC.INSTANCE.decode(byteBuf);
-
+    protected void channelRead0(ChannelHandlerContext ctx, Packet reqeust) throws Exception {
         if (reqeust instanceof LoginRequestPacket) {
             handleLogin(ctx, (LoginRequestPacket) reqeust);
         } else if (reqeust instanceof MessageRequestPacket) {
             handleMessage(ctx, (MessageRequestPacket) reqeust);
         }
-
     }
 
     private void handleMessage(ChannelHandlerContext ctx, MessageRequestPacket reqeust) {

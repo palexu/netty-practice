@@ -1,9 +1,9 @@
-package top.palexu.netty.im;
+package top.palexu.netty.im.client;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.ChannelInboundHandlerAdapter;
+import io.netty.channel.SimpleChannelInboundHandler;
 import top.palexu.netty.im.protocol.*;
 import top.palexu.netty.im.util.LoginUtil;
 
@@ -13,7 +13,7 @@ import java.util.UUID;
 /**
  * @author palexu * @since 2019/06/26 15:24
  */
-public class ClientHandler extends ChannelInboundHandlerAdapter {
+public class ClientHandler extends SimpleChannelInboundHandler<Packet> {
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
@@ -29,18 +29,16 @@ public class ClientHandler extends ChannelInboundHandlerAdapter {
         ctx.channel().writeAndFlush(buffer);
     }
 
+
     @Override
-    public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-        ByteBuf byteBuf = (ByteBuf) msg;
-
-        Packet packet = PacketCodeC.INSTANCE.decode(byteBuf);
-
+    protected void channelRead0(ChannelHandlerContext ctx, Packet packet) throws Exception {
         if (packet instanceof LoginResponsePacket) {
             handleLoginResponse(ctx.channel(), (LoginResponsePacket) packet);
         } else if (packet instanceof MessageResponsePacket) {
             handleMessageResponse((MessageResponsePacket) packet);
         }
     }
+
 
     private void handleMessageResponse(MessageResponsePacket packet) {
 

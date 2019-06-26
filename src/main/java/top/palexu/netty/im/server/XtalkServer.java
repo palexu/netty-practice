@@ -1,4 +1,4 @@
-package top.palexu.netty.im;
+package top.palexu.netty.im.server;
 
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
@@ -10,6 +10,8 @@ import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
+import top.palexu.netty.im.protocol.PacketDecoder;
+import top.palexu.netty.im.protocol.PacketEncoder;
 
 /**
  * @author palexu * @since 2019/06/25 17:01
@@ -34,7 +36,10 @@ public class XtalkServer {
 
                         @Override
                         protected void initChannel(SocketChannel ch) throws Exception {
-                            ch.pipeline().addLast(new ServerHandler());
+                            ch.pipeline()
+                                    .addLast(new PacketDecoder())
+                                    .addLast(new ServerHandler())
+                                    .addLast(new PacketEncoder());
                         }
                     });
 
@@ -43,7 +48,7 @@ public class XtalkServer {
                     .childOption(ChannelOption.SO_KEEPALIVE, true)
                     //是否开启Nagle算法，true表示关闭，false表示开启，通俗地说，如果要求高实时性，有数据发送时就马上发送，就关闭，如果需要减少发送次数减少网络交互，就开启
                     .childOption(ChannelOption.TCP_NODELAY, true);
-                    //系统用于临时存放已完成三次握手的请求的队列的最大长度，如果连接建立频繁，服务器处理创建新连接较慢，可以适当调大这个参数
+            //系统用于临时存放已完成三次握手的请求的队列的最大长度，如果连接建立频繁，服务器处理创建新连接较慢，可以适当调大这个参数
 //                    .childOption(ChannelOption.SO_BACKLOG, 1024);
 
             ChannelFuture channelFuture = serverBootstrap.bind(port)
