@@ -3,10 +3,7 @@ package top.palexu.netty.im;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
-import top.palexu.netty.im.protocol.LoginRequestPacket;
-import top.palexu.netty.im.protocol.LoginResponsePacket;
-import top.palexu.netty.im.protocol.Packet;
-import top.palexu.netty.im.protocol.PacketCodeC;
+import top.palexu.netty.im.protocol.*;
 
 import java.util.Date;
 import java.util.UUID;
@@ -25,10 +22,7 @@ public class ClientHandler extends ChannelInboundHandlerAdapter {
         loginRequestPacket.setUsername("pale");
         loginRequestPacket.setPassword("xu");
 
-        PacketCodeC c = new PacketCodeC();
-
-
-        ByteBuf buffer = c.encode(loginRequestPacket);
+        ByteBuf buffer = PacketCodeC.INSTANCE.encode(loginRequestPacket);
 
         ctx.channel().writeAndFlush(buffer);
     }
@@ -40,13 +34,23 @@ public class ClientHandler extends ChannelInboundHandlerAdapter {
         Packet packet = PacketCodeC.INSTANCE.decode(byteBuf);
 
         if (packet instanceof LoginResponsePacket) {
-            LoginResponsePacket response = (LoginResponsePacket) packet;
+            handleLoginResponse((LoginResponsePacket) packet);
+        } else if (packet instanceof MessageResponsePacket) {
+            handleMessageResponse((MessageResponsePacket) packet);
+        }
+    }
 
-            if (response.isSuccess()) {
-                System.out.println("登录成功!");
-            } else {
-                System.out.println("登录失败，msg: " + response.getMsg());
-            }
+    private void handleMessageResponse(MessageResponsePacket packet) {
+
+        System.out.println("message response: " + packet.getMsg());
+    }
+
+    private void handleLoginResponse(LoginResponsePacket packet) {
+
+        if (packet.isSuccess()) {
+            System.out.println("登录成功!");
+        } else {
+            System.out.println("登录失败，msg: " + packet.getMsg());
         }
     }
 }
