@@ -7,6 +7,7 @@ import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioSocketChannel;
+import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
 import io.netty.util.AttributeKey;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
@@ -46,6 +47,7 @@ public class XtalkCmdClient {
                         @Override
                         protected void initChannel(NioSocketChannel ch) throws Exception {
                             ch.pipeline()
+                                    .addLast(new LengthFieldBasedFrameDecoder(Integer.MAX_VALUE, 7, 4))
                                     .addLast(new PacketDecoder())
                                     .addLast(new LoginResponseHandler())
                                     .addLast(new MsgResponseHandler())
@@ -70,7 +72,8 @@ public class XtalkCmdClient {
                     public void operationComplete(Future<? super Void> future) throws Exception {
                         if (future.isSuccess()) {
                             System.out.println("连接成功!");
-                            console((ChannelFuture) future);
+//                            console((ChannelFuture) future);
+                            autoSend((ChannelFuture) future);
                             return;
                         }
                         System.out.println("连接失败! 剩余尝试次数" + retry);
@@ -111,6 +114,31 @@ public class XtalkCmdClient {
                     System.out.println("输入消息:");
                     Scanner scanner = new Scanner(System.in);
                     String msg = scanner.nextLine();
+
+                    MessageRequestPacket packet = new MessageRequestPacket();
+                    packet.setMsg(msg);
+
+                    channelFuture.channel().writeAndFlush(packet);
+                }
+            }
+        });
+    }
+
+    private void autoSend(final ChannelFuture channelFuture) {
+        ThreadPoolExecutor executor = new ThreadPoolExecutor(1, 1, 60, TimeUnit.SECONDS, new ArrayBlockingQueue<Runnable>(1), new ThreadFactory() {
+            public Thread newThread(Runnable r) {
+                return new Thread(r, "console-thread");
+            }
+        });
+        executor.submit(new Runnable() {
+            public void run() {
+                int i = 0;
+                while (!Thread.interrupted() && i < 1000) {
+                    if (!LoginUtil.isLogin(channelFuture.channel())) {
+                        continue;
+                    }
+                    i++;
+                    String msg = "寒蝉凄切②，对长亭晚③，骤雨初歇。都门帐饮无绪④，留恋处（一说：方留恋处 [1]  ），兰舟催发⑤。执手相看泪眼，竟无语凝噎⑥。念去去⑦，千里烟波，暮霭沉沉楚天阔⑧。多情自古伤离别，更那堪冷落清秋节！今宵酒醒何处⑨？杨柳岸，晓风残月。此去经年⑩，应是良辰好景虚设。便纵有千种风情⑪，更与何人说⑫？ [2] ";
 
                     MessageRequestPacket packet = new MessageRequestPacket();
                     packet.setMsg(msg);
