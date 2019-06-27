@@ -1,7 +1,6 @@
 package top.palexu.netty.im.protocol;
 
 import io.netty.buffer.ByteBuf;
-import io.netty.buffer.ByteBufAllocator;
 import top.palexu.netty.im.serialize.JSONSerializer;
 import top.palexu.netty.im.serialize.Serializer;
 
@@ -26,9 +25,7 @@ public class PacketCodeC {
         serializerMap.put(new JSONSerializer().getSerializerAlgorithm(), new JSONSerializer());
     }
 
-    public ByteBuf encode(Packet packet) {
-        ByteBuf byteBuf = ByteBufAllocator.DEFAULT.ioBuffer();
-
+    public void encode(ByteBuf byteBuf, Packet packet) {
         byte[] bytes = Serializer.DEFAULT.serialize(packet);
 
         byteBuf.writeInt(MAGIC_NUMBER);
@@ -37,8 +34,6 @@ public class PacketCodeC {
         byteBuf.writeByte(packet.getCommand());
         byteBuf.writeInt(bytes.length);
         byteBuf.writeBytes(bytes);
-
-        return byteBuf;
     }
 
     public Packet decode(ByteBuf byteBuf) {
