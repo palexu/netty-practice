@@ -23,6 +23,8 @@ public class PacketCodeC {
         packetTypeMap.put(Command.LOGIN_RESPONSE, LoginResponsePacket.class);
         packetTypeMap.put(Command.MESSAGE_REQUEST, MessageRequestPacket.class);
         packetTypeMap.put(Command.MESSAGE_RESPONSE, MessageResponsePacket.class);
+        packetTypeMap.put(Command.HEARTBEAT_REQUEST, HeartBeatRequestPacket.class);
+        packetTypeMap.put(Command.HEARTBEAT_RESPONSE, HeartBeatResponsePacket.class);
         serializerMap.put(new JSONSerializer().getSerializerAlgorithm(), new JSONSerializer());
     }
 

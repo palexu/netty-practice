@@ -48,6 +48,7 @@ public class XtalkCmdClient {
                             ch.pipeline()
                                     .addLast(new PacketCheckAndSplitHandler(Integer.MAX_VALUE, 7, 4))
                                     .addLast(new PacketCodecHandler())
+                                    .addLast(new HeartBeatTimerHandler())
                                     .addLast(new LoginResponseHandler())
                                     .addLast(new MsgResponseHandler());
                         }

@@ -36,9 +36,11 @@ public class XtalkServer {
                         @Override
                         protected void initChannel(SocketChannel ch) throws Exception {
                             ch.pipeline()
+                                    .addLast(new IMIdleStateHandler())
                                     .addLast(new PacketCheckAndSplitHandler(Integer.MAX_VALUE, 7, 4))
                                     .addLast(new PacketCodecHandler())
                                     .addLast(new LoginRequestHandler())
+                                    .addLast(new HeartBeatRequestHandler())
                                     .addLast(new AuthHandler())
                                     .addLast(new MsgRequestHandler());
                         }
