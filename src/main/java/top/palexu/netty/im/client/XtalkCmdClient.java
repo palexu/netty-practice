@@ -7,13 +7,13 @@ import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioSocketChannel;
-import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
 import io.netty.util.AttributeKey;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
-import top.palexu.netty.im.protocol.packet.MessageRequestPacket;
 import top.palexu.netty.im.protocol.PacketDecoder;
 import top.palexu.netty.im.protocol.PacketEncoder;
+import top.palexu.netty.im.protocol.packet.MessageRequestPacket;
+import top.palexu.netty.im.server.PacketCheckAndSplitHandler;
 import top.palexu.netty.im.util.LoginUtil;
 
 import java.util.Scanner;
@@ -47,7 +47,7 @@ public class XtalkCmdClient {
                         @Override
                         protected void initChannel(NioSocketChannel ch) throws Exception {
                             ch.pipeline()
-                                    .addLast(new LengthFieldBasedFrameDecoder(Integer.MAX_VALUE, 7, 4))
+                                    .addLast(new PacketCheckAndSplitHandler(Integer.MAX_VALUE, 7, 4))
                                     .addLast(new PacketDecoder())
                                     .addLast(new LoginResponseHandler())
                                     .addLast(new MsgResponseHandler())

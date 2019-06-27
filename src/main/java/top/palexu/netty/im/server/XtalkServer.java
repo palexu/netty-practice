@@ -38,7 +38,7 @@ public class XtalkServer {
                         @Override
                         protected void initChannel(SocketChannel ch) throws Exception {
                             ch.pipeline()
-                                    .addLast(new LengthFieldBasedFrameDecoder(Integer.MAX_VALUE, 7, 4))
+                                    .addLast(new PacketCheckAndSplitHandler(Integer.MAX_VALUE, 7, 4))
                                     .addLast(new PacketDecoder())
                                     .addLast(new LoginRequestHandler())
                                     .addLast(new MsgRequestHandler())
