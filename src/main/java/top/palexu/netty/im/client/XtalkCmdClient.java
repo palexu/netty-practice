@@ -10,8 +10,7 @@ import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.util.AttributeKey;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
-import top.palexu.netty.im.protocol.PacketDecoder;
-import top.palexu.netty.im.protocol.PacketEncoder;
+import top.palexu.netty.im.protocol.PacketCodecHandler;
 import top.palexu.netty.im.protocol.packet.MessageRequestPacket;
 import top.palexu.netty.im.server.PacketCheckAndSplitHandler;
 import top.palexu.netty.im.util.UserUtil;
@@ -48,10 +47,9 @@ public class XtalkCmdClient {
                         protected void initChannel(NioSocketChannel ch) throws Exception {
                             ch.pipeline()
                                     .addLast(new PacketCheckAndSplitHandler(Integer.MAX_VALUE, 7, 4))
-                                    .addLast(new PacketDecoder())
+                                    .addLast(new PacketCodecHandler())
                                     .addLast(new LoginResponseHandler())
-                                    .addLast(new MsgResponseHandler())
-                                    .addLast(new PacketEncoder());
+                                    .addLast(new MsgResponseHandler());
                         }
                     });
             bootstrap.option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 5000)

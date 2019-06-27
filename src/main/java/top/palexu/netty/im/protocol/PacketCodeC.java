@@ -26,7 +26,7 @@ public class PacketCodeC {
         serializerMap.put(new JSONSerializer().getSerializerAlgorithm(), new JSONSerializer());
     }
 
-    public void encode(ByteBuf byteBuf, Packet packet) {
+    public ByteBuf encode(ByteBuf byteBuf, Packet packet) {
         byte[] bytes = Serializer.DEFAULT.serialize(packet);
 
         byteBuf.writeInt(MAGIC_NUMBER);
@@ -35,6 +35,7 @@ public class PacketCodeC {
         byteBuf.writeByte(packet.getCommand());
         byteBuf.writeInt(bytes.length);
         byteBuf.writeBytes(bytes);
+        return byteBuf;
     }
 
     public Packet decode(ByteBuf byteBuf) {

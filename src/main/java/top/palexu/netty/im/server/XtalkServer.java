@@ -10,8 +10,7 @@ import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
-import top.palexu.netty.im.protocol.PacketDecoder;
-import top.palexu.netty.im.protocol.PacketEncoder;
+import top.palexu.netty.im.protocol.PacketCodecHandler;
 
 /**
  * @author palexu * @since 2019/06/25 17:01
@@ -38,11 +37,10 @@ public class XtalkServer {
                         protected void initChannel(SocketChannel ch) throws Exception {
                             ch.pipeline()
                                     .addLast(new PacketCheckAndSplitHandler(Integer.MAX_VALUE, 7, 4))
-                                    .addLast(new PacketDecoder())
+                                    .addLast(new PacketCodecHandler())
                                     .addLast(new LoginRequestHandler())
                                     .addLast(new AuthHandler())
-                                    .addLast(new MsgRequestHandler())
-                                    .addLast(new PacketEncoder());
+                                    .addLast(new MsgRequestHandler());
                         }
                     });
 
