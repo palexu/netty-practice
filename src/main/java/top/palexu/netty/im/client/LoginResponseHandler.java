@@ -3,8 +3,8 @@ package top.palexu.netty.im.client;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
-import top.palexu.netty.im.protocol.LoginRequestPacket;
-import top.palexu.netty.im.protocol.LoginResponsePacket;
+import top.palexu.netty.im.protocol.packet.LoginRequestPacket;
+import top.palexu.netty.im.protocol.packet.LoginResponsePacket;
 import top.palexu.netty.im.util.LoginUtil;
 
 import java.util.Date;

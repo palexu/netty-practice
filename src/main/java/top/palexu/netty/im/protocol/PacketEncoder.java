@@ -3,6 +3,7 @@ package top.palexu.netty.im.protocol;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToByteEncoder;
+import top.palexu.netty.im.protocol.packet.Packet;
 
 /**
  * @author junyu.x@shulidata.com

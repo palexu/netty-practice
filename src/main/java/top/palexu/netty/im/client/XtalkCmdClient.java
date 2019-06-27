@@ -11,7 +11,7 @@ import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
 import io.netty.util.AttributeKey;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
-import top.palexu.netty.im.protocol.MessageRequestPacket;
+import top.palexu.netty.im.protocol.packet.MessageRequestPacket;
 import top.palexu.netty.im.protocol.PacketDecoder;
 import top.palexu.netty.im.protocol.PacketEncoder;
 import top.palexu.netty.im.util.LoginUtil;

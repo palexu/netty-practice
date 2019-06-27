@@ -1,4 +1,4 @@
-package top.palexu.netty.im.protocol;
+package top.palexu.netty.im.protocol.packet;
 
 import lombok.Data;
 

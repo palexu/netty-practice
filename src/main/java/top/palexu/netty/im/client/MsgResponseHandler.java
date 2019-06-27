@@ -2,7 +2,7 @@ package top.palexu.netty.im.client;
 
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
-import top.palexu.netty.im.protocol.MessageResponsePacket;
+import top.palexu.netty.im.protocol.packet.MessageResponsePacket;
 
 /**
  * @author palexu * @since 2019/06/26 15:24
