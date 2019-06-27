@@ -11,7 +11,6 @@ import io.netty.util.AttributeKey;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
 import top.palexu.netty.im.protocol.MessageRequestPacket;
-import top.palexu.netty.im.protocol.PacketCodeC;
 import top.palexu.netty.im.protocol.PacketDecoder;
 import top.palexu.netty.im.protocol.PacketEncoder;
 import top.palexu.netty.im.util.LoginUtil;
@@ -48,7 +47,8 @@ public class XtalkCmdClient {
                         protected void initChannel(NioSocketChannel ch) throws Exception {
                             ch.pipeline()
                                     .addLast(new PacketDecoder())
-                                    .addLast(new ClientHandler())
+                                    .addLast(new LoginResponseHandler())
+                                    .addLast(new MsgResponseHandler())
                                     .addLast(new PacketEncoder());
                         }
                     });
@@ -115,7 +115,7 @@ public class XtalkCmdClient {
                     MessageRequestPacket packet = new MessageRequestPacket();
                     packet.setMsg(msg);
 
-                    channelFuture.channel().writeAndFlush(PacketCodeC.INSTANCE.encode(packet));
+                    channelFuture.channel().writeAndFlush(packet);
                 }
             }
         });

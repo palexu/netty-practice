@@ -1,19 +1,23 @@
 package top.palexu.netty.im.client;
 
-import io.netty.buffer.ByteBuf;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
-import top.palexu.netty.im.protocol.*;
+import top.palexu.netty.im.protocol.LoginRequestPacket;
+import top.palexu.netty.im.protocol.LoginResponsePacket;
 import top.palexu.netty.im.util.LoginUtil;
 
 import java.util.Date;
 import java.util.UUID;
 
 /**
- * @author palexu * @since 2019/06/26 15:24
+ * @author palexu * @since 2019/06/27 10:23
  */
-public class ClientHandler extends SimpleChannelInboundHandler<Packet> {
+public class LoginResponseHandler extends SimpleChannelInboundHandler<LoginResponsePacket> {
+    @Override
+    protected void channelRead0(ChannelHandlerContext ctx, LoginResponsePacket msg) throws Exception {
+        handleLoginResponse(ctx.channel(), msg);
+    }
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
@@ -24,25 +28,7 @@ public class ClientHandler extends SimpleChannelInboundHandler<Packet> {
         loginRequestPacket.setUsername("pale");
         loginRequestPacket.setPassword("xu");
 
-        ByteBuf buffer = PacketCodeC.INSTANCE.encode(loginRequestPacket);
-
-        ctx.channel().writeAndFlush(buffer);
-    }
-
-
-    @Override
-    protected void channelRead0(ChannelHandlerContext ctx, Packet packet) throws Exception {
-        if (packet instanceof LoginResponsePacket) {
-            handleLoginResponse(ctx.channel(), (LoginResponsePacket) packet);
-        } else if (packet instanceof MessageResponsePacket) {
-            handleMessageResponse((MessageResponsePacket) packet);
-        }
-    }
-
-
-    private void handleMessageResponse(MessageResponsePacket packet) {
-
-        System.out.println("message response: " + packet.getMsg());
+        ctx.channel().writeAndFlush(loginRequestPacket);
     }
 
     private void handleLoginResponse(Channel channel, LoginResponsePacket packet) {

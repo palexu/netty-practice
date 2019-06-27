@@ -38,7 +38,8 @@ public class XtalkServer {
                         protected void initChannel(SocketChannel ch) throws Exception {
                             ch.pipeline()
                                     .addLast(new PacketDecoder())
-                                    .addLast(new ServerHandler())
+                                    .addLast(new LoginRequestHandler())
+                                    .addLast(new MsgRequestHandler())
                                     .addLast(new PacketEncoder());
                         }
                     });
