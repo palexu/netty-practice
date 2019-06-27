@@ -5,7 +5,7 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import top.palexu.netty.im.protocol.packet.LoginRequestPacket;
 import top.palexu.netty.im.protocol.packet.LoginResponsePacket;
-import top.palexu.netty.im.util.LoginUtil;
+import top.palexu.netty.im.util.UserUtil;
 
 import java.util.Date;
 import java.util.UUID;
@@ -24,9 +24,11 @@ public class LoginResponseHandler extends SimpleChannelInboundHandler<LoginRespo
         System.out.println(new Date() + " 客户端开始登录");
 
         LoginRequestPacket loginRequestPacket = new LoginRequestPacket();
-        loginRequestPacket.setUserId(UUID.randomUUID().toString());
+        loginRequestPacket.setUserId(UUID.randomUUID().toString().substring(0, 4));
         loginRequestPacket.setUsername("pale");
         loginRequestPacket.setPassword("xu");
+
+        System.out.println("我是" + loginRequestPacket);
 
         ctx.channel().writeAndFlush(loginRequestPacket);
     }
@@ -35,7 +37,7 @@ public class LoginResponseHandler extends SimpleChannelInboundHandler<LoginRespo
 
         if (packet.isSuccess()) {
             System.out.println("登录成功!");
-            LoginUtil.setLogin(channel);
+            UserUtil.setLogin(channel);
         } else {
             System.out.println("登录失败，msg: " + packet.getMsg());
         }

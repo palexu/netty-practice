@@ -9,6 +9,7 @@ import static top.palexu.netty.im.protocol.Command.MESSAGE_REQUEST;
  */
 @Data
 public class MessageRequestPacket extends Packet {
+    private String toUserId;
     private String msg;
 
     @Override

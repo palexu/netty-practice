@@ -1,6 +1,7 @@
 package top.palexu.netty.im.protocol;
 
 import io.netty.util.AttributeKey;
+import top.palexu.netty.im.util.User;
 
 /**
  * @author junyu.x@shulidata.com
@@ -8,4 +9,5 @@ import io.netty.util.AttributeKey;
  */
 public interface XtalkAttributes {
     AttributeKey<Boolean> LOGIN = AttributeKey.newInstance("login");
+    AttributeKey<User> USER = AttributeKey.newInstance("user");
 }

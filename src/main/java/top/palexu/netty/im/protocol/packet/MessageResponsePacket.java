@@ -9,6 +9,8 @@ import static top.palexu.netty.im.protocol.Command.MESSAGE_RESPONSE;
  */
 @Data
 public class MessageResponsePacket extends Packet {
+    private String fromUserId;
+    private String fromUserName;
     private String msg;
 
     @Override

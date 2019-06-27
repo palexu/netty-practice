@@ -16,7 +16,8 @@ public class MsgResponseHandler extends SimpleChannelInboundHandler<MessageRespo
 
 
     private void handleMessageResponse(MessageResponsePacket packet) {
-        System.out.println("message response: " + packet.getMsg());
+        System.out.println("message response: ");
+        System.out.println(packet.getFromUserId() + "," + packet.getFromUserName() + ":" + packet.getMsg());
     }
 
 

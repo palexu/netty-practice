@@ -14,7 +14,7 @@ import top.palexu.netty.im.protocol.PacketDecoder;
 import top.palexu.netty.im.protocol.PacketEncoder;
 import top.palexu.netty.im.protocol.packet.MessageRequestPacket;
 import top.palexu.netty.im.server.PacketCheckAndSplitHandler;
-import top.palexu.netty.im.util.LoginUtil;
+import top.palexu.netty.im.util.UserUtil;
 
 import java.util.Scanner;
 import java.util.concurrent.ArrayBlockingQueue;
@@ -72,8 +72,8 @@ public class XtalkCmdClient {
                     public void operationComplete(Future<? super Void> future) throws Exception {
                         if (future.isSuccess()) {
                             System.out.println("连接成功!");
-//                            console((ChannelFuture) future);
-                            autoSend((ChannelFuture) future);
+                            console((ChannelFuture) future);
+//                            autoSend((ChannelFuture) future);
                             return;
                         }
                         System.out.println("连接失败! 剩余尝试次数" + retry);
@@ -108,7 +108,7 @@ public class XtalkCmdClient {
         executor.submit(new Runnable() {
             public void run() {
                 while (!Thread.interrupted()) {
-                    if (!LoginUtil.isLogin(channelFuture.channel())) {
+                    if (!UserUtil.isLogin(channelFuture.channel())) {
                         continue;
                     }
                     System.out.println("输入消息:");
@@ -116,7 +116,8 @@ public class XtalkCmdClient {
                     String msg = scanner.nextLine();
 
                     MessageRequestPacket packet = new MessageRequestPacket();
-                    packet.setMsg(msg);
+                    packet.setToUserId(msg.split("#")[0]);
+                    packet.setMsg(msg.split("#")[1]);
 
                     channelFuture.channel().writeAndFlush(packet);
                 }
@@ -134,7 +135,7 @@ public class XtalkCmdClient {
             public void run() {
                 int i = 0;
                 while (!Thread.interrupted() && i < 1000) {
-                    if (!LoginUtil.isLogin(channelFuture.channel())) {
+                    if (!UserUtil.isLogin(channelFuture.channel())) {
                         continue;
                     }
                     i++;
