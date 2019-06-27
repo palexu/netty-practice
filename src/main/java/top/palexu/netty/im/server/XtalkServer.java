@@ -8,7 +8,6 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
-import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
 import top.palexu.netty.im.protocol.PacketDecoder;
@@ -41,6 +40,7 @@ public class XtalkServer {
                                     .addLast(new PacketCheckAndSplitHandler(Integer.MAX_VALUE, 7, 4))
                                     .addLast(new PacketDecoder())
                                     .addLast(new LoginRequestHandler())
+                                    .addLast(new AuthHandler())
                                     .addLast(new MsgRequestHandler())
                                     .addLast(new PacketEncoder());
                         }

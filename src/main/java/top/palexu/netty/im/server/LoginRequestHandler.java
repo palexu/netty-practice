@@ -4,6 +4,7 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import top.palexu.netty.im.protocol.packet.LoginRequestPacket;
 import top.palexu.netty.im.protocol.packet.LoginResponsePacket;
+import top.palexu.netty.im.util.LoginUtil;
 
 /**
  * @author palexu * @since 2019/06/27 10:21
@@ -17,6 +18,7 @@ public class LoginRequestHandler extends SimpleChannelInboundHandler<LoginReques
     private void handleLogin(ChannelHandlerContext ctx, LoginRequestPacket reqeust) {
         LoginResponsePacket response = new LoginResponsePacket();
         if (valid(reqeust)) {
+            LoginUtil.setLogin(ctx.channel());
             response.setSuccess(true);
         } else {
             response.setSuccess(false);
