@@ -11,7 +11,6 @@ import top.palexu.netty.protocol.RpcResponse;
  */
 @Slf4j
 public class RpcRequestHandler extends SimpleChannelInboundHandler<RpcRequest> {
-    //这里维护一个映射，
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, RpcRequest msg) throws Exception {

@@ -10,8 +10,10 @@
     <version>1.0-SNAPSHOT</version>
     <modules>
         <module>netty-im</module>
-        <module>netty-rpc/netty-rpc-test</module>
         <module>netty-rpc/netty-rpc-core</module>
+        <module>netty-rpc/netty-rpc-test-client</module>
+        <module>netty-rpc/netty-rpc-test-server</module>
+        <module>netty-rpc/netty-rpc-test-common</module>
     </modules>
 
     <dependencies>

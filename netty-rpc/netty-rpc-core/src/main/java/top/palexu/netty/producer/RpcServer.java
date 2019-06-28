@@ -9,12 +9,15 @@ import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
+import org.springframework.beans.BeansException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import top.palexu.netty.protocol.CodecHandler;
 
 /**
  * @author palexu * @since 2019/06/28 11:36
  */
-public class RpcServer {
+public class RpcServer implements ApplicationContextAware {
 
     private static final int port = 10800;
 
@@ -54,5 +57,14 @@ public class RpcServer {
             boss.shutdownGracefully().sync();
             worker.shutdownGracefully().sync();
         }
+    }
+
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+//        Map<String, Object> beansWithAnnotation = applicationContext.getBeansWithAnnotation(RpcService.class);
+//        for (Object value : beansWithAnnotation.values()) {
+//            Object o = RpcProxy.create(value.getClass());
+//        }
+
     }
 }

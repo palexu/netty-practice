@@ -9,12 +9,15 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
+import org.springframework.beans.BeansException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import top.palexu.netty.protocol.CodecHandler;
 
 /**
  * @author palexu * @since 2019/06/28 11:36
  */
-public class RpcClient {
+public class RpcClient implements ApplicationContextAware {
 
     public Channel start(String host, int port) throws InterruptedException {
         EventLoopGroup group = new NioEventLoopGroup();
@@ -49,6 +52,11 @@ public class RpcClient {
                 });
 
         return channelFuture.channel();
+
+    }
+
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
 
     }
 }

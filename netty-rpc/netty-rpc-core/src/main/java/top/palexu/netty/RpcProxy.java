@@ -1,5 +1,7 @@
 package top.palexu.netty;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import top.palexu.netty.protocol.RpcRequest;
 import top.palexu.netty.protocol.RpcResponse;
 
@@ -15,8 +17,10 @@ import java.util.concurrent.TimeUnit;
 /**
  * @author palexu * @since 2019/06/28 10:50
  */
+@Component
 public class RpcProxy {
-    ServiceRegistry serviceRegistry = new ServiceRegistry();
+    @Autowired
+    ServiceRegistry serviceRegistry;
 
     private static final Map<String, Object> resultMap = new HashMap<>();
 
