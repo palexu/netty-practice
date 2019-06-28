@@ -1,5 +1,6 @@
 package top.palexu.netty;
 
+import io.netty.channel.Channel;
 import top.palexu.netty.consumer.RpcClient;
 
 /**
@@ -14,6 +15,7 @@ public class TestClient {
         request.setArgs(new String[]{"SCIP"});
 
 
-        new RpcClient().start("127.0.0.1", 10800);
+        Channel start = new RpcClient().start("127.0.0.1", 10800);
+        start.writeAndFlush(request);
     }
 }

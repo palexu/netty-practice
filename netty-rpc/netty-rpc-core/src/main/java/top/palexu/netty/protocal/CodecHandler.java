@@ -1,6 +1,7 @@
 package top.palexu.netty.protocal;
 
 import io.netty.buffer.ByteBuf;
+import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToMessageCodec;
 
@@ -9,6 +10,7 @@ import java.util.List;
 /**
  * @author palexu * @since 2019/06/28 14:47
  */
+@ChannelHandler.Sharable
 public class CodecHandler extends MessageToMessageCodec<ByteBuf, Packet> {
     @Override
     protected void encode(ChannelHandlerContext ctx, Packet msg, List<Object> out) throws Exception {

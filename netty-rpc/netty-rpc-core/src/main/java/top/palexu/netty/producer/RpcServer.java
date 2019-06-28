@@ -9,7 +9,7 @@ import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
-import top.palexu.netty.consumer.PrintHandler;
+import top.palexu.netty.protocal.CodecHandler;
 
 /**
  * @author palexu * @since 2019/06/28 11:36
@@ -17,10 +17,6 @@ import top.palexu.netty.consumer.PrintHandler;
 public class RpcServer {
 
     private static final int port = 10800;
-
-    public static void main(String[] args) throws InterruptedException {
-        new RpcServer().start();
-    }
 
     public void start() throws InterruptedException {
         EventLoopGroup boss = new NioEventLoopGroup(1);
@@ -36,7 +32,7 @@ public class RpcServer {
                         @Override
                         protected void initChannel(SocketChannel ch) throws Exception {
                             ch.pipeline()
-                                    .addLast(new EchoServerHandler());
+                                    .addLast(new CodecHandler());
                         }
                     });
             ChannelFuture channelFuture = serverBootstrap
