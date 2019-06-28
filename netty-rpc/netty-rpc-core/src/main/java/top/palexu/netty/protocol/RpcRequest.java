@@ -1,7 +1,6 @@
-package top.palexu.netty;
+package top.palexu.netty.protocol;
 
 import lombok.Data;
-import top.palexu.netty.protocal.Packet;
 
 /**
  * @author palexu * @since 2019/06/28 10:52
@@ -11,5 +10,11 @@ public class RpcRequest extends Packet {
     private long requestId;
     private String clazz;
     private String method;
+    private Class<?>[] parameterTypes;
     private Object[] args;
+
+    @Override
+    byte getCommand() {
+        return Command.METHOD_REQUEST;
+    }
 }

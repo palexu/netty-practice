@@ -9,7 +9,7 @@ import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
-import top.palexu.netty.protocal.CodecHandler;
+import top.palexu.netty.protocol.CodecHandler;
 
 /**
  * @author palexu * @since 2019/06/28 11:36
@@ -32,7 +32,8 @@ public class RpcServer {
                         @Override
                         protected void initChannel(SocketChannel ch) throws Exception {
                             ch.pipeline()
-                                    .addLast(new CodecHandler());
+                                    .addLast(new CodecHandler())
+                                    .addLast(new RpcRequestHandler());
                         }
                     });
             ChannelFuture channelFuture = serverBootstrap

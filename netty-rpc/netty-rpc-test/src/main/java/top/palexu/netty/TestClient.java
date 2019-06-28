@@ -2,6 +2,7 @@ package top.palexu.netty;
 
 import io.netty.channel.Channel;
 import top.palexu.netty.consumer.RpcClient;
+import top.palexu.netty.protocol.RpcRequest;
 
 /**
  * @author palexu * @since 2019/06/28 14:54

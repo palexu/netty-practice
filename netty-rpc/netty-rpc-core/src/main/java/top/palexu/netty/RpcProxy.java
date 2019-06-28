@@ -1,8 +1,7 @@
-package top.palexu.netty.consumer;
+package top.palexu.netty;
 
-import top.palexu.netty.RpcRequest;
-import top.palexu.netty.RpcResponse;
-import top.palexu.netty.ServiceRegistry;
+import top.palexu.netty.protocol.RpcRequest;
+import top.palexu.netty.protocol.RpcResponse;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;

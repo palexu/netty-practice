@@ -1,8 +1,6 @@
-package top.palexu.netty.protocal;
+package top.palexu.netty.protocol;
 
 import io.netty.buffer.ByteBuf;
-import top.palexu.netty.RpcRequest;
-import top.palexu.netty.RpcResponse;
 import top.palexu.netty.serialize.JSONSerializer;
 import top.palexu.netty.serialize.Serializer;
 

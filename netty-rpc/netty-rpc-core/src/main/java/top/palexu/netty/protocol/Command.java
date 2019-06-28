@@ -1,4 +1,4 @@
-package top.palexu.netty.protocal;
+package top.palexu.netty.protocol;
 
 /**
  * @author palexu * @since 2019/06/28 14:36

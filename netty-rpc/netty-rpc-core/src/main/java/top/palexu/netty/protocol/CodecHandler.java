@@ -1,4 +1,4 @@
-package top.palexu.netty.protocal;
+package top.palexu.netty.protocol;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandler;
@@ -14,13 +14,12 @@ import java.util.List;
 public class CodecHandler extends MessageToMessageCodec<ByteBuf, Packet> {
     @Override
     protected void encode(ChannelHandlerContext ctx, Packet msg, List<Object> out) throws Exception {
-        System.out.println("encoding");
         out.add(PacketCodeC.INSTANCE.encode(ctx.alloc().ioBuffer(), msg));
     }
 
     @Override
     protected void decode(ChannelHandlerContext ctx, ByteBuf msg, List<Object> out) throws Exception {
-        System.out.println("decoding");
-        out.add(PacketCodeC.INSTANCE.decode(msg));
+        Packet decode = PacketCodeC.INSTANCE.decode(msg);
+        out.add(decode);
     }
 }
