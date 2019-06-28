@@ -6,7 +6,11 @@
 
     <groupId>top.palexu</groupId>
     <artifactId>netty-practice</artifactId>
+    <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
+    <modules>
+        <module>netty-im</module>
+    </modules>
 
     <dependencies>
         <dependency>
