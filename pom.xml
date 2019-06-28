@@ -10,6 +10,8 @@
     <version>1.0-SNAPSHOT</version>
     <modules>
         <module>netty-im</module>
+        <module>netty-rpc/netty-rpc-test</module>
+        <module>netty-rpc/netty-rpc-core</module>
     </modules>
 
     <dependencies>
@@ -27,6 +29,11 @@
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
             <version>1.2.54</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <version>1.4.2.RELEASE</version>
         </dependency>
     </dependencies>
 

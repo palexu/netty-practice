@@ -68,6 +68,7 @@ public class XtalkCmdClient {
     private void connect(final Bootstrap bootstrap, final int retry) throws InterruptedException {
         final ChannelFuture channelFuture = bootstrap.connect().sync()
                 .addListener(new GenericFutureListener<Future<? super Void>>() {
+                    @Override
                     public void operationComplete(Future<? super Void> future) throws Exception {
                         if (future.isSuccess()) {
                             System.out.println("连接成功!");
@@ -83,6 +84,7 @@ public class XtalkCmdClient {
                         int order = 5 - retry + 1;
                         int delay = 1 << order;
                         bootstrap.config().group().schedule(new Runnable() {
+                            @Override
                             public void run() {
                                 try {
                                     connect(bootstrap, retry - 1);
@@ -100,11 +102,13 @@ public class XtalkCmdClient {
 
     private void console(final ChannelFuture channelFuture) {
         ThreadPoolExecutor executor = new ThreadPoolExecutor(1, 1, 60, TimeUnit.SECONDS, new ArrayBlockingQueue<Runnable>(1), new ThreadFactory() {
+            @Override
             public Thread newThread(Runnable r) {
                 return new Thread(r, "console-thread");
             }
         });
         executor.submit(new Runnable() {
+            @Override
             public void run() {
                 while (!Thread.interrupted()) {
                     if (!UserUtil.isLogin(channelFuture.channel())) {
@@ -126,11 +130,13 @@ public class XtalkCmdClient {
 
     private void autoSend(final ChannelFuture channelFuture) {
         ThreadPoolExecutor executor = new ThreadPoolExecutor(1, 1, 60, TimeUnit.SECONDS, new ArrayBlockingQueue<Runnable>(1), new ThreadFactory() {
+            @Override
             public Thread newThread(Runnable r) {
                 return new Thread(r, "console-thread");
             }
         });
         executor.submit(new Runnable() {
+            @Override
             public void run() {
                 int i = 0;
                 while (!Thread.interrupted() && i < 1000) {
