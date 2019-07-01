@@ -1,6 +1,8 @@
 package top.palexu.netty.protocol;
 
+import com.alibaba.fastjson.JSONObject;
 import io.netty.buffer.ByteBuf;
+import lombok.extern.slf4j.Slf4j;
 import top.palexu.netty.serialize.JSONSerializer;
 import top.palexu.netty.serialize.Serializer;
 
@@ -10,6 +12,7 @@ import java.util.Map;
 /**
  * @author palexu * @since 2019/06/26 15:02
  */
+@Slf4j
 public class PacketCodeC {
     public static final PacketCodeC INSTANCE = new PacketCodeC();
 
@@ -50,7 +53,16 @@ public class PacketCodeC {
         Serializer serializer = getSerializer(serializeAlgorithm);
 
         if (requestType != null && serializer != null) {
-            return serializer.deserialize(requestType, bytes);
+            if (requestType == RpcResponse.class) {
+                RpcResponse result = serializer.deserialize(requestType, bytes);
+                if (result.getData() instanceof JSONObject) {
+                    JSONObject data = (JSONObject) result.getData();
+                    result.setData(data.toJavaObject(result.getReturnType()));
+                }
+                return result;
+            } else {
+                return serializer.deserialize(requestType, bytes);
+            }
         }
 
         return serializer.deserialize(requestType, bytes);

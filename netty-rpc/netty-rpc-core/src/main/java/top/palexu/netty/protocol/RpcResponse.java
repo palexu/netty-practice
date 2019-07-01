@@ -8,6 +8,7 @@ import lombok.Data;
 @Data
 public class RpcResponse extends Packet {
     private long requestId;
+    private Class<?> returnType;
     private Object data;
 
     @Override

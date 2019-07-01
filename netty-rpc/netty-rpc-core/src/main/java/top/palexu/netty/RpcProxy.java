@@ -2,6 +2,8 @@ package top.palexu.netty;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import top.palexu.netty.consumer.Rpc;
+import top.palexu.netty.consumer.RpcClient;
 import top.palexu.netty.protocol.RpcRequest;
 import top.palexu.netty.protocol.RpcResponse;
 
@@ -43,8 +45,9 @@ public class RpcProxy {
                     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
                         //构造rpc请求
                         RpcRequest request = new RpcRequest();
-                        request.setClazz(proxy.getClass().getSimpleName());
+                        request.setClazz(interfaceClass.getSimpleName());
                         request.setMethod(method.getName());
+                        setPramTypes(args, request);
                         request.setArgs(args);
 
                         //获取服务提供者地址
@@ -53,14 +56,23 @@ public class RpcProxy {
                         int port = Integer.valueOf(hostAndPort.split(":")[1]);
 
                         //发送请求
-//                        RpcClient.client(host, port).writeAndFlush(request);
-
-                        Thread.sleep(10000);
-                        //当有数据时，让外部唤醒
+                        Rpc rpc = new Rpc();
+                        RpcClient.start(rpc, "127.0.0.1", 10800).writeAndFlush(request);
+                        RpcResponse response = rpc.get(10, TimeUnit.SECONDS);
 
                         //获取结果
-                        return new RpcResponse();
+                        return response.getData();
                     }
                 });
+    }
+
+    private void setPramTypes(Object[] args, RpcRequest request) {
+        Class<?>[] parameterTypes = new Class[args.length];
+        int i = 0;
+        for (Object arg : args) {
+            parameterTypes[i] = arg.getClass();
+            i++;
+        }
+        request.setParameterTypes(parameterTypes);
     }
 }
